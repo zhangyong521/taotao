@@ -1,0 +1,11 @@
+package com.taotao.Pojo;
+
+/**
+ * 上传图片的返回结果
+ * @author 17616
+ *
+ */
+public class PictureResult {
+
+	
+}

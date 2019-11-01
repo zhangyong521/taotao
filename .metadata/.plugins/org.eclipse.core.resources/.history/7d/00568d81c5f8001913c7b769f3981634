@@ -1,0 +1,8 @@
+package com.taotao.Pojo;
+
+public class TreeNode {
+
+	private long id;
+	private String text;
+	private String state;
+}

@@ -1,18 +1,22 @@
 package com.taotao.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.reflection.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.Pojo.EUDataGridResult;
+import com.taotao.Pojo.TaotaoResult;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemExample;
 import com.taotao.pojo.TbItemExample.Criteria;
 import com.taotao.service.ItemService;
+import com.taotao.util.IDUtils;
 
 /**
  * 商品管理service
@@ -25,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private TbItemMapper itemMapper;
+	private TbItemMapper itemDescMapper;
 	
 	@Override
 	public TbItem getItemById(long itemId) {
@@ -58,4 +63,19 @@ public class ItemServiceImpl implements ItemService {
 		return result;
 	}
 
+	@Override
+	public TaotaoResult createItem(TbItem item) {
+		//item补全
+		//生成Id
+		Long itenId = IDUtils.genItemId();
+		item.setId(itenId);
+		//商品的状态，1.正常，2.下架 3.删除
+		item.setStatus((byte) 1);
+		item.setCreated(new Date());
+		item.setUpdated(new Date());
+		//插入数据库
+		itemMapper.insert(item);
+		
+		return TaotaoResult.ok();
+	}
 }

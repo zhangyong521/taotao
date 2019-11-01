@@ -1,0 +1,15 @@
+package com.taotao.service.impl;
+
+import java.util.List;
+
+import com.fasterxml.jackson.core.TreeNode;
+import com.taotao.service.ItemCatService;
+
+public class ItemCatServiceImpl implements ItemCatService {
+
+	@Override
+	public List<TreeNode> getItemCatList(long parentId) {
+		return null;
+	}
+
+}

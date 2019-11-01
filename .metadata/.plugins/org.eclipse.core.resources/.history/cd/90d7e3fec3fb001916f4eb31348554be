@@ -1,0 +1,14 @@
+package com.taotao.controller;
+
+public class PictureController {
+	@Autowired
+	private PictureService pictureService;
+	
+	@RequestMapping("/pic/upload")
+	@ResponseBody
+	public PictureResult upload(MultipartFile uploadFile) {
+		PictureResult result = pictureService.uploadPicture(uploadFile);
+		return result;
+	}
+
+}

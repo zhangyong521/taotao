@@ -1,0 +1,10 @@
+package com.taotao.controller;
+
+/**
+ * 页面跳转 controller
+ * @author 17616
+ *
+ */
+public class PageController {
+
+}

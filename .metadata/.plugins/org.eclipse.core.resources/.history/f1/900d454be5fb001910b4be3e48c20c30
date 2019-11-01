@@ -1,0 +1,81 @@
+package com.taotao.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.reflection.ExceptionUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.Pojo.EUDataGridResult;
+import com.taotao.Pojo.TaotaoResult;
+import com.taotao.mapper.TbItemMapper;
+import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemExample;
+import com.taotao.pojo.TbItemExample.Criteria;
+import com.taotao.service.ItemService;
+import com.taotao.util.IDUtils;
+
+/**
+ * 商品管理service
+ * 
+ * @author 17616
+ *
+ */
+@Service
+public class ItemServiceImpl implements ItemService {
+
+	@Autowired
+	private TbItemMapper itemMapper;
+	private TbItemMapper itemDescMapper;
+	
+	@Override
+	public TbItem getItemById(long itemId) {
+		
+		//TbItem item = itemMapper.selectByPrimaryKey(itemId);
+		//添加查询条件
+		TbItemExample example = new TbItemExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdEqualTo(itemId);
+		List<TbItem> list = itemMapper.selectByExample(example);
+		if (list != null && list.size() > 0) {
+			TbItem item = list.get(0);
+			return item;
+		}
+		return null;
+	}
+
+	@Override
+	public EUDataGridResult getItemList(int page, int rows) {
+		//查詢商品列表
+		TbItemExample example = new TbItemExample();
+		//分页处理
+		PageHelper.startPage(page, rows);
+		List<TbItem> list = itemMapper.selectByExample(example);
+		//创建一个返回对象
+		EUDataGridResult result = new EUDataGridResult();
+		result.setRows(list);
+		//取记录总条数
+		PageInfo<TbItem> pageInfo = new PageInfo<>(list);
+		result.setTotal(pageInfo.getTotal());
+		return result;
+	}
+
+	@Override
+	public TaotaoResult createItem(TbItem item) {
+		//item补全
+		//生成Id
+		Long itenId = IDUtils.genItemId();
+		item.setId(itenId);
+		//商品的状态，1.正常，2.下架 3.删除
+		item.setStatus((byte) 1);
+		item.setCreated(new Date());
+		item.setUpdated(new Date());
+		
+		itemMapper.insert(item);
+		
+		return null;
+	}
+}
